@@ -1,7 +1,7 @@
 # Shioaji_Example
 
-1. using Shioaji
-2. Shioaji Quote
+1. install API - Shioaji
+2. Shioaji Quote -  ```SjQuote.py```
 3. Download DolphinDB
 4. DDB Schema
 5. Sjioaji Quote To DDB

@@ -1,0 +1,35 @@
+login('admin','123456')
+// Create TSE Ticks 
+if(existsDatabase("dfs://TSETicks")){
+    dropDatabase("dfs://TSETicks")
+}
+schemaTSETicks = streamTable(
+    array(SYMBOL,0) as Exchange
+   ,array(INT,0) as SubSeq
+   ,array(SYMBOL,0) as Code
+   ,array(DATE,0) as Date
+   ,array(NANOTIME,0) as Time
+   ,array(DOUBLE,0) as Close
+   ,array(LONG,0) as Volume
+   ,array(LONG,0) as VolSum
+   ,array(LONG,0) as AmountSum
+   ,array(INT,0) as TickType
+   ,array(INT,0) as Simtrade
+   ,array(NANOTIMESTAMP,0) as ReceviceTime
+)
+enableTableShareAndPersistence(table=schemaTSETicks,asynWrite=true, compress=false,cacheSize=10000, tableName="StreamTSETicks");
+db = database("dfs://TSETicks",VALUE, 2021.03.30..2021.03.30)
+db.createPartitionedTable(select * from StreamTSETicks,`TSETicks,`Date)
+
+// Create TSE Quotes
+if(existsDatabase("dfs://TSEQuotes")){
+    dropDatabase("dfs://TSEQuotes")
+}
+dateDomain = database("", VALUE, 2021.03.30..2021.03.30)
+symDomain = database("", HASH,[STRING,20])
+schemaStreamTSEQuotes = streamTable(10:0,`Code`Date`Time`SimTrade`AskPrice1`AskPrice2`AskPrice3`AskPrice4`AskPrice5`AskVolume1`AskVolume2`AskVolume3`AskVolume4`AskVolume5`BidPrice1`BidPrice2`BidPrice3`BidPrice4`BidPrice5`BidVolume1`BidVolume2`BidVolume3`BidVolume4`BidVolume5,[SYMBOL,DATE,TIME,INT,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE]);
+quoteDB = database("dfs://TSEQuotes", COMPO, [dateDomain, symDomain])
+quoteDB.createPartitionedTable(select * from schemaStreamTSEQuotes,"TSEQuotes",`Date`Code)
+enableTableShareAndPersistence(table=schemaStreamTSEQuotes,asynWrite=true, compress=false,cacheSize=10000, tableName="StreamTSEQuotes");
+
+undef all
