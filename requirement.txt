@@ -5,3 +5,4 @@ python-dotenv==0.16.0
 pytz==2021.1
 rich==9.13.0
 shioaji==0.3.1.dev8
+dolphindb==1.30.0.1
