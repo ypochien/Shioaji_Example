@@ -27,7 +27,7 @@ if(existsDatabase("dfs://TSEQuotes")){
 }
 dateDomain = database("", VALUE, 2021.03.30..2021.03.30)
 symDomain = database("", HASH,[STRING,20])
-schemaStreamTSEQuotes = streamTable(10:0,`Code`Date`Time`SimTrade`AskPrice1`AskPrice2`AskPrice3`AskPrice4`AskPrice5`AskVolume1`AskVolume2`AskVolume3`AskVolume4`AskVolume5`BidPrice1`BidPrice2`BidPrice3`BidPrice4`BidPrice5`BidVolume1`BidVolume2`BidVolume3`BidVolume4`BidVolume5,[SYMBOL,DATE,TIME,INT,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE]);
+schemaStreamTSEQuotes = streamTable(10:0,`Code`Date`Time`SimTrade`AskPrice1`AskPrice2`AskPrice3`AskPrice4`AskPrice5`AskVolume1`AskVolume2`AskVolume3`AskVolume4`AskVolume5`BidPrice1`BidPrice2`BidPrice3`BidPrice4`BidPrice5`BidVolume1`BidVolume2`BidVolume3`BidVolume4`BidVolume5,[SYMBOL,DATE,NANOTIME,INT,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE]);
 quoteDB = database("dfs://TSEQuotes", COMPO, [dateDomain, symDomain])
 quoteDB.createPartitionedTable(select * from schemaStreamTSEQuotes,"TSEQuotes",`Date`Code)
 enableTableShareAndPersistence(table=schemaStreamTSEQuotes,asynWrite=true, compress=false,cacheSize=10000, tableName="StreamTSEQuotes");
