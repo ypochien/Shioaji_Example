@@ -1,0 +1,17 @@
+login("admin","123456")
+
+getDFSTables()
+tb = loadTable("dfs://TSETicks", `TSETicks)
+subscribeTable(,"StreamTSETicks","to_dfs",-1, tb,batchSize=200,throttle=1)
+tb = loadTable("dfs://TSEQuotes", `TSEQuotes)
+subscribeTable(,"StreamTSEQuotes","to_dfs",-1, tb,batchSize=200,throttle=1)
+select top 10 * from StreamTSETicks order by Time desc
+select top 10 * from StreamTSEQuotes order by time desc
+select top 10 * from tb order by Time desc
+
+unsubscribeTable(,"StreamTSEQuotes","to_dfs")
+unsubscribeTable(,"StreamTSETicks","to_dfs")
+
+getStreamingStat().subWorkers
+
+select * from StreamTSEQuotes where Date=today() order by Time desc
